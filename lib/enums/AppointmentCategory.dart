@@ -1,0 +1,4 @@
+enum AppointmentCategory{
+  training,
+  massage
+}
