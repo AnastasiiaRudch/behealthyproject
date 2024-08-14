@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
+import 'calendar_screen.dart';
+import 'trainings_screen.dart';
+
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
 
@@ -11,6 +14,12 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   int _currentIndex = 2;
+  final List<Widget> _screens = [
+    const Center(child: Text('Account Content')),
+    const TrainingsScreen(),
+    const CalendarScreen(),
+    const Center(child: Text('History Content')),
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -58,9 +67,7 @@ class _HomeScreenState extends State<HomeScreen> {
           ],
         ),
       ),
-      body: const Center(
-        child: Text('Main Content'),
-      ),
+      body: _screens[_currentIndex],
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _currentIndex, // Active button
         onTap: (index) {
