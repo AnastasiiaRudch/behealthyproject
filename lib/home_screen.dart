@@ -14,6 +14,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return Scaffold(
       appBar: AppBar(
         title: Row(
@@ -24,7 +25,7 @@ class _HomeScreenState extends State<HomeScreen> {
               padding: const EdgeInsets.symmetric(horizontal: 10),
               decoration: BoxDecoration(
                 // color: Colors.grey,
-                color: Theme.of(context).colorScheme.background,
+                color: theme.colorScheme.background,
                 borderRadius: BorderRadius.circular(20),
               ),
               child: Center(
@@ -32,7 +33,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   'Be Healthy',
                   style: TextStyle(
                     // color: Colors.white,
-                    color: Theme.of(context).colorScheme.onPrimaryContainer,
+                    color: theme.colorScheme.onPrimaryContainer,
                     fontSize: 20,
                     fontWeight: FontWeight.bold,
                   ),
@@ -42,14 +43,14 @@ class _HomeScreenState extends State<HomeScreen> {
             const Spacer(), // Adding space between logo and icons
             IconButton(
               iconSize: 30,
-              icon: Icon(Icons.local_fire_department_rounded, color: Theme.of(context).iconTheme.color),
+              icon: Icon(Icons.local_fire_department_rounded, color: theme.iconTheme.color),
               onPressed: () {
                 // Action
               },
             ),
             IconButton(
               iconSize: 30,
-              icon: Icon(Icons.notifications, color: Theme.of(context).iconTheme.color),
+              icon: Icon(Icons.notifications, color: theme.iconTheme.color),
               onPressed: () {
                 // Action
               },
@@ -67,9 +68,9 @@ class _HomeScreenState extends State<HomeScreen> {
             _currentIndex = index;
           });
         },
-        backgroundColor: Theme.of(context).bottomNavigationBarTheme.backgroundColor,
-        selectedItemColor: Theme.of(context).bottomNavigationBarTheme.selectedItemColor,
-        unselectedItemColor: Theme.of(context).bottomNavigationBarTheme.unselectedItemColor,
+        backgroundColor: theme.bottomNavigationBarTheme.backgroundColor,
+        selectedItemColor: theme.bottomNavigationBarTheme.selectedItemColor,
+        unselectedItemColor: theme.bottomNavigationBarTheme.unselectedItemColor,
         selectedFontSize: 16,
         unselectedFontSize: 14,
         items: const [
