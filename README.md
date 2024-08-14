@@ -1,5 +1,8 @@
 # BeHealthy Project
 
+## HW #10
+![Adding Calendar, icons, Training cards, Tasks cheeckboxes](assets/images/result.gif)
+
 ## HW #9
 ![AppBar, bottomNavigationBar](assets/images/home_screen.png)
 
