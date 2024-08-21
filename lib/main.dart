@@ -1,6 +1,7 @@
 import 'package:behealthyproject/theme.dart';
 import 'package:flutter/material.dart';
 
+import 'calendarstate_provider.dart';
 import 'home_screen.dart';
 
 void main() {
@@ -18,7 +19,9 @@ class MyApp extends StatelessWidget {
       theme: lightTheme,
       darkTheme: darkTheme,
       themeMode: ThemeMode.light, //system - tema yak v telephoni
-      home: const HomeScreen(),
+      home: const CalendarStateProvider(
+        child: HomeScreen(),
+      ),
     );
   }
 }
