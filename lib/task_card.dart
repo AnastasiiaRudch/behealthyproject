@@ -34,8 +34,9 @@ class TaskCard extends StatelessWidget {
                 print("Checkbox toggled");
                 // We get the container and call the task update
                 final container = CalendarStateContainer.of(context);
-                if (container != null) {
-                  container.onTaskStatusChanged({'name': taskName, 'isDone': isDone});
+                final calendarState = container?.calendarState;
+                if (calendarState != null) {
+                  calendarState.updateTaskStatus({'name': taskName, 'isDone': isDone});
                 }
               },
               checkColor: Colors.grey.shade200,

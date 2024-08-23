@@ -1,36 +1,33 @@
 import 'package:behealthyproject/custom_button.dart';
 import 'package:flutter/material.dart';
 import 'package:table_calendar/table_calendar.dart';
+import 'calendar_model.dart';
 import 'calendarstate_container.dart';
 import 'event_card.dart';
 import 'task_card.dart';
 
 class CalendarScreen extends StatelessWidget {
-   CalendarScreen({super.key});
-
+  CalendarScreen({super.key});
 
   final CalendarFormat _calendarFormat = CalendarFormat.month;
   DateTime _focusedDay = DateTime.now();
 
-
   @override
   Widget build(BuildContext context) {
-
     final container = CalendarStateContainer.of(context);
     if (container == null) return const SizedBox.shrink();
+
+    final calendarState = container.calendarState;
+
     print("CalendarScreen opened");
-
-    print("Selected Day: ${container.selectedDay}");
+    print("Selected Day: ${calendarState.selectedDay}");
     print("Focused Day: $_focusedDay");
-
 
     // Initialize workouts with the selected day's workouts on first render
     // receive workouts for the selected day from the container
-    List<String>? workouts = container.workoutEvents[container.selectedDay] ?? [];
+    List<String>? workouts = calendarState.workoutEvents[calendarState.selectedDay] ?? [];
     print("workouts on Selected Day: $workouts");
-    String title = container.selectedProgramButtonIndex == 0
-        ? 'Workouts'
-        : 'Tasks';
+    String title = calendarState.selectedProgramButtonIndex == 0 ? 'Workouts' : 'Tasks';
 
     return Scaffold(
       appBar: AppBar(
@@ -38,17 +35,17 @@ class CalendarScreen extends StatelessWidget {
           children: [
             CustomButton(
               text: 'My Calendar',
-              isSelected: container.selectedAppButtonIndex == 0,
+              isSelected: calendarState.selectedAppButtonIndex == 0,
               onPressed: () {
-                container.onAppButtonChanged(0);
+                calendarState.updateAppButtonIndex(0);
               },
             ),
             const SizedBox(width: 10),
             CustomButton(
               text: 'Appointment',
-              isSelected: container.selectedAppButtonIndex == 1,
+              isSelected: calendarState.selectedAppButtonIndex == 1,
               onPressed: () {
-                container.onAppButtonChanged(1);
+                calendarState.updateAppButtonIndex(1);
               },
             ),
           ],
@@ -63,25 +60,22 @@ class CalendarScreen extends StatelessWidget {
             focusedDay: _focusedDay,
             calendarFormat: _calendarFormat,
             selectedDayPredicate: (day) {
-              return isSameDay(container.selectedDay, day);
+              return isSameDay(calendarState.selectedDay, day);
             },
             onDaySelected: (selectedDay, focusedDay) {
-              container.onDayChanged(selectedDay);
+              calendarState.updateSelectedDay(selectedDay);
               _focusedDay = focusedDay;
               print("Focused Day: $_focusedDay");
               // Explicitly update workouts for the selected day
-              workouts = container.workoutEvents[selectedDay];
+              workouts = calendarState.workoutEvents[selectedDay];
               print("Workouts for selected day: $workouts");
-
             },
             eventLoader: (day) {
-              List<Widget> eventIcons = container.events[day] ?? [];
-
+              List<Widget> eventIcons = calendarState.events[day] ?? [];
               // If there is workout on chosen date, add Icon
-              if (container.workoutEvents.containsKey(day)) {
+              if (calendarState.workoutEvents.containsKey(day)) {
                 // Check if the fitness icon is already in the list
-                bool hasFitnessIcon = eventIcons.any((icon) =>
-                icon is Icon && (icon as Icon).icon == Icons.fitness_center);
+                bool hasFitnessIcon = eventIcons.any((icon) => icon is Icon && (icon as Icon).icon == Icons.fitness_center);
 
                 if (!hasFitnessIcon) {
                   eventIcons.add(const Icon(Icons.fitness_center));
@@ -92,10 +86,9 @@ class CalendarScreen extends StatelessWidget {
             },
             calendarStyle: const CalendarStyle(
               markerDecoration: BoxDecoration(
-                color: Colors
-                    .transparent, // Icons instead of dots in calendar
+                color: Colors.transparent,// Icons instead of dots in calendar
               ),
-              markersMaxCount: 3, // Amount of markers on date
+              markersMaxCount: 3,// Amount of markers on date
             ),
             calendarBuilders: CalendarBuilders(
               markerBuilder: (context, date, events) {
@@ -132,17 +125,17 @@ class CalendarScreen extends StatelessWidget {
               children: [
                 CustomButton(
                   text: 'Workouts',
-                  isSelected: container.selectedProgramButtonIndex == 0,
+                  isSelected: calendarState.selectedProgramButtonIndex == 0,
                   onPressed: () {
-                    container.onProgramButtonChanged(0);
+                    calendarState.updateProgramButtonIndex(0);
                   },
                 ),
                 const SizedBox(width: 10),
                 CustomButton(
                   text: 'Tasks',
-                  isSelected: container.selectedProgramButtonIndex == 1,
+                  isSelected: calendarState.selectedProgramButtonIndex == 1,
                   onPressed: () {
-                    container.onProgramButtonChanged(1);
+                    calendarState.updateProgramButtonIndex(1);
                   },
                 ),
               ],
@@ -156,8 +149,7 @@ class CalendarScreen extends StatelessWidget {
               children: [
                 Text(
                   title,
-                  style: const TextStyle(
-                      fontSize: 18, fontWeight: FontWeight.bold),
+                  style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                 ),
                 IconButton(
                   icon: const Icon(Icons.add_circle, color: Colors.black),
@@ -169,32 +161,29 @@ class CalendarScreen extends StatelessWidget {
             ),
           ),
           // List of Workouts/Tasks under Calendar
-          _buildProgramContent(container, workouts),
+          _buildProgramContent(calendarState, workouts),
           const SizedBox(height: 20),
         ],
       ),
     );
   }
 
-   Widget _buildProgramContent(CalendarStateContainer container,
-       List<String>? workouts) {
-
-     return container.selectedProgramButtonIndex == 0
-         ? Column(
-       children: workouts?.map((workout) =>
-           EventCard(eventTitle: workout)).toList() ?? [],
-     )
-         : Column(
-       children: container.tasks.map((task) {
-         return TaskCard(
-           taskName: task['name'],
-           isDone: task['isDone'],
-           onToggle: () {
-             container.onTaskStatusChanged(task);
-           },
-         );
-       }).toList(),
-     );
-   }
-
+  Widget _buildProgramContent(CalendarModel calendarState, List<String>? workouts) {
+    return calendarState.selectedProgramButtonIndex == 0
+        ? Column(
+      children: workouts?.map((workout) => EventCard(eventTitle: workout)).toList() ?? [],
+    )
+        : Column(
+      children: calendarState.tasks.map((task) {
+        return TaskCard(
+          taskName: task['name'],
+          isDone: task['isDone'],
+          onToggle: () {
+            calendarState.updateTaskStatus(task);
+          },
+        );
+      }).toList(),
+    );
+  }
 }
+
