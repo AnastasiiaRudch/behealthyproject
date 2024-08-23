@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'calendarstate_container.dart';
+
 class TaskCard extends StatelessWidget {
   final String taskName;
   final bool isDone;
@@ -14,6 +16,7 @@ class TaskCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print("in TaskCard: TaskCard rendering with task: $taskName, done: $isDone");
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 5.0),
       child: Container(
@@ -28,7 +31,13 @@ class TaskCard extends StatelessWidget {
               shape: const CircleBorder(), // Circle checkbox
               value: isDone,
               onChanged: (bool? value) {
-                onToggle();
+                print("Checkbox toggled");
+                // We get the container and call the task update
+                final container = CalendarStateContainer.of(context);
+                final calendarState = container?.calendarState;
+                if (calendarState != null) {
+                  calendarState.updateTaskStatus({'name': taskName, 'isDone': isDone});
+                }
               },
               checkColor: Colors.grey.shade200,
               activeColor: Colors.indigo.shade400, //Checkbox background color when selected

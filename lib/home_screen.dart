@@ -17,7 +17,7 @@ class _HomeScreenState extends State<HomeScreen> {
   final List<Widget> _screens = [
     const Center(child: Text('Account Content')),
     const TrainingsScreen(),
-    const CalendarScreen(),
+    CalendarScreen(),
     const Center(child: Text('History Content')),
   ];
 

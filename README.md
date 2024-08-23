@@ -1,7 +1,10 @@
 # BeHealthy Project
 
+## HW #11 
+Changing from StatefulWidget to InheritedWidget, UI the same
+
 ## HW #10
-![Adding Calendar, icons, Training cards, Tasks cheeckboxes](assets/images/result.gif)
+![Adding Calendar, icons, Training cards, Tasks checkboxes](assets/images/result.gif)
 
 ## HW #9
 ![AppBar, bottomNavigationBar](assets/images/home_screen.png)

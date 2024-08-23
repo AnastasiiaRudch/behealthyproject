@@ -1,7 +1,9 @@
 import 'package:behealthyproject/theme.dart';
 import 'package:flutter/material.dart';
-
+import 'calendar_model.dart';
+import 'calendarstate_container.dart';
 import 'home_screen.dart';
+import 'initial_data.dart';
 
 void main() {
   runApp(const MyApp());
@@ -13,12 +15,22 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Be Healthy App',
-      theme: lightTheme,
-      darkTheme: darkTheme,
-      themeMode: ThemeMode.light, //system - tema yak v telephoni
-      home: const HomeScreen(),
+    return CalendarStateContainer(
+      calendarState: CalendarModel(
+        selectedAppButtonIndex: 0,
+        selectedProgramButtonIndex: 0,
+        selectedDay: DateTime.now(),
+        events: getInitialEvents(),
+        workoutEvents: getInitialWorkoutEvents(),
+        tasks: getInitialTasks(),
+      ),
+      child: MaterialApp(
+        title: 'Be Healthy App',
+        theme: lightTheme,
+        darkTheme: darkTheme,
+        themeMode: ThemeMode.light,
+        home: const HomeScreen(),
+      ),
     );
   }
 }
@@ -35,7 +47,7 @@ class _MyHomePageState extends State<MyHomePage> {
   int _counter = 0;
 
   @override
-  void initState(){
+  void initState() {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       print('Size is ${SizeContainer.of(context)!.biggestSize}');
     });
@@ -92,13 +104,12 @@ class SizeContainer extends InheritedWidget {
     return context.dependOnInheritedWidgetOfExactType<SizeContainer>();
   }
 
-  void updateSize(bool isIncrease){
-    if(isIncrease){
+  void updateSize(bool isIncrease) {
+    if (isIncrease) {
       biggestSize++;
-    }else{
+    } else {
       biggestSize--;
     }
-
   }
 
   @override
